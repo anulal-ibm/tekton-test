@@ -1,0 +1,26 @@
+# first assign your public repo's url to an environment variable
+REPO_URL=https://github.com/anulal-ibm/tekton-test
+
+# create a pipelinerun yaml file
+cat <<EOF > pipelinerun.yaml
+kind: PipelineRun
+apiVersion: tekton.dev/v1beta1
+metadata:
+  name: run-basic-pipeline-from-git
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+    - name: url
+      value: ${REPO_URL}
+    - name: revision
+      value: add-a-simple-pipeline
+    - name: pathInRepo
+      value: pipeline.yaml
+  params:
+  - name: username
+    value: liza
+EOF
+
+# execute the pipelinerun
+kubectl apply -f ./pipelinerun.yaml
